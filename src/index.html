@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./scss/styles.css" />
+    <title>Mistral - Playground</title>
+  </head>
+  <body>
+    <div class="max-w-[40rem] mx-auto mt-[3rem]">
+      <h1 class="text-slate-500 text-[2rem] text-center font-[700]">Chispas</h1>
+      <p class="ai-response" id="output"></p>
+    </div>
+    <div class="fixed bottom-[3rem] w-[90%] left-0 right-0 mx-auto">
+      <form
+        class="flex justify-between items-center align-center bg-slate-300 rounded-full p-[3rem]"
+      >
+        <input
+          class="bg-white rounded-full w-[90%] p-[1-5rem]"
+          type="text"
+          name="prompt"
+          id="prompt-box"
+        />
+        <button
+          class="w-[10%] text-center bg-sky-600 px-[1.5rem] py-[0-5rem] text-white"
+          type="submit"
+        >
+          Send
+        </button>
+      </form>
+    </div>
+  </body>
+  <script type="module" src="./ts/main.ts"></script>
+</html>
