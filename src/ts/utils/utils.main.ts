@@ -21,3 +21,14 @@ export const revealStringByChar = (
     }
   }, _speed)
 }
+
+export const getResponseCurrentNode = (): HTMLElement => {
+  console.log('entro')
+
+  const myOutputNode = document.getElementById('dialog-box') as HTMLElement
+
+  const myResponses: HTMLCollectionBase = myOutputNode.querySelectorAll(
+    'div.dialog.ai-response'
+  )
+  return myResponses[myResponses.length - 1] as HTMLElement
+}

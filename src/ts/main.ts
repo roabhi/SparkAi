@@ -1,15 +1,31 @@
-require('dotenv').config()
+// ? Import Mistral Ai
+
 import { Mistral } from '@mistralai/mistralai'
 import {
   ChatCompletionRequest,
   ChatCompletionResponse,
 } from '@mistralai/mistralai/models/components'
 
-import { revealStringByChar } from './utils/utils.main'
+// ? Import credentials
 
-const apiKey = process.env.MISTRAL_API_KEY || ''
+import { apiKey } from './globals/globals.constants'
+
+// ? Import utils funcs
+
+import { revealStringByChar, getResponseCurrentNode } from './utils/utils.main'
+
+// ? Import DOM references
+
+import {
+  myOutputNode,
+  myForm,
+  myInputField,
+  mySendButton,
+} from './globals/globals.dom'
+
+// ? Init Mistral
+
 const client = new Mistral({ apiKey: apiKey })
-const myOutputNode = document.getElementById('output') as HTMLElement
 
 /**
  * ? Mistral Options
@@ -17,8 +33,33 @@ const myOutputNode = document.getElementById('output') as HTMLElement
  * ? client.chat.stream --> Gives you an aswer sliced by tokens
  */
 
-const outputResponseFromAi = (_output: string) => {
-    revealStringByChar(_output, myOutputNode, 5)
+const insertDomDialog = (_content: string, _type: string) => {
+    const myDialogNode: HTMLDivElement = document.createElement('div')
+    const myDialogFirstChildDiv: HTMLDivElement = document.createElement('div')
+    const myDialogLastChildNode: HTMLDivElement = document.createElement('div')
+
+    const myDialogContent: HTMLParagraphElement = document.createElement('p')
+
+    myDialogContent.textContent = _content
+
+    // ? _type MUST be query or ai-response for this to work
+    myDialogNode.classList.add('dialog', `${_type}`)
+
+    myDialogLastChildNode.appendChild(myDialogContent)
+
+    myDialogNode.appendChild(myDialogFirstChildDiv)
+    myDialogNode.appendChild(myDialogLastChildNode)
+
+    myOutputNode.appendChild(myDialogNode)
+  },
+  outputResponseFromAi = (_output: string) => {
+    const myCurrentResponse: HTMLElement = getResponseCurrentNode()
+
+    const myResponseContainer = myCurrentResponse.querySelector(
+      'p'
+    ) as HTMLElement
+
+    revealStringByChar(_output, myResponseContainer, 5)
   },
   processAiResponse = async (_prompt: string) => {
     const myRequest: ChatCompletionRequest = {
@@ -31,54 +72,71 @@ const outputResponseFromAi = (_output: string) => {
         {
           role: 'system',
           content:
-            'Try to be as concise as possible with no more than 100 words per message. Add a little of sarcasm or irony when possible',
+            'Try to be as concise as possible with no more than 200 words per message.',
         },
       ],
       temperature: 0.4,
     }
 
+    insertDomDialog('...', 'ai-response')
+
     // ? for complete answers
 
-    // await client.chat
-    //   .complete(myRequest)
-    //   .then((_res: ChatCompletionResponse) => {
-    //     const answers = _res.choices
+    await client.chat
+      .complete(myRequest)
+      .then((_res: ChatCompletionResponse) => {
+        // ? Reset form input
 
-    //     if (answers && answers != undefined) {
-    //       // console.log(answers[0].message.content)
-    //       outputResponseFromAi(answers[0].message.content!)
-    //     } else {
-    //       outputResponseFromAi('Error on your request')
-    //     }
-    //   })
+        myInputField.value = ''
+        mySendButton.disabled = false
+
+        const answers = _res.choices
+
+        if (answers && answers != undefined) {
+          // console.log(answers[0].message.content)
+          outputResponseFromAi(answers[0].message.content!)
+        } else {
+          outputResponseFromAi('Error on your request')
+        }
+      })
 
     // ? for stream answers
 
-    const result = await client.chat.stream({
-      model: 'mistral-small-latest',
-      messages: [
-        { role: 'user', content: _prompt },
-        {
-          role: 'system',
-          content:
-            'Try to be as concise as possible with no more than 100 words per message. Add a little of sarcasm or irony when possible',
-        },
-      ],
-      temperature: 0.5,
-    })
+    // const result = await client.chat.stream({
+    //   model: 'mistral-small-latest',
+    //   messages: [
+    //     { role: 'user', content: _prompt },
+    //     {
+    //       role: 'system',
+    //       content:
+    //         'Try to be as concise as possible with no more than 100 words per message. Add a little of sarcasm or irony when possible',
+    //     },
+    //   ],
+    //   temperature: 0.5,
+    // })
 
-    for await (const chunk of result) {
-      const streamText = chunk.data.choices[0].delta.content
-      // console.log(streamText)
-      myOutputNode.textContent = myOutputNode.textContent + streamText!
-    }
+    // for await (const chunk of result) {
+    //   const streamText = chunk.data.choices[0].delta.content
+    //   // console.log(streamText)
+    //   myOutputNode.textContent = myOutputNode.textContent + streamText!
+    // }
   },
   init = (e) => {
     document.removeEventListener('DOMContentLoaded', init, false)
 
-    const prompt: string = 'Which is the best Spanish food?'
+    myForm.addEventListener('submit', (e) => {
+      e.preventDefault()
 
-    processAiResponse(prompt)
+      const myTarget = e.target as HTMLFormElement
+      const myInput = myTarget.querySelector('input') as HTMLInputElement
+      const prompt: string = myInput.value
+
+      insertDomDialog(prompt, 'query')
+
+      mySendButton.disabled = true
+
+      processAiResponse(prompt)
+    })
   }
 
 document.addEventListener('DOMContentLoaded', init, false)

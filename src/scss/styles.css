@@ -1,3 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  height: 100%;
+  font-family: 'Work Sans', sans-serif;
+}
+
+main {
+  position: absolute;
+  top: 3rem;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  overflow-y: hidden;
+
+  div.dialog-box {
+    max-width: 40rem;
+    width: 90%;
+    margin: 8rem auto 12rem auto;
+
+    /* height: 9rem auto calc(100vh - 72px - 3rem - 3rem - 112px - 3rem - 3rem)
+      auto; */
+    /* height: calc(100vh - 72px - 3rem - 3rem - 112px - 3rem - 3rem); */
+    overflow-y: auto;
+
+    /*
+    * Styles for dialog
+    */
+
+    div.dialog {
+      display: flex;
+
+      /* flex-direction: row; */
+      margin: 0 auto 0.85rem auto;
+
+      p {
+        border-radius: 0.5rem;
+
+        padding: 0.85rem;
+        font-size: 0.85rem;
+      }
+
+      &.query {
+        flex-direction: row-reverse;
+
+        div:last-of-type {
+          display: flex;
+          justify-content: flex-end;
+          p {
+            background: rgb(14 165 233) none;
+
+            font-weight: 600;
+            color: white;
+
+            width: 70%;
+          }
+        }
+      }
+
+      &.ai-response {
+        align-items: center;
+
+        p {
+          background: rgb(241 245 249) none;
+          font-weight: 400;
+          color: #111;
+          padding: 1.5rem !important;
+          width: 90%;
+        }
+        margin-bottom: 2.5rem !important;
+      }
+    }
+  }
+}
+
+input {
+  outline: none;
+  border: none;
+}
