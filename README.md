@@ -1,3 +1,3 @@
-# ChispasAI
+# ChispasAi
 
-First Ai interface based on Mistral AI basic model
+Basic Ai interface / assitance based on Mistral's pixtral-12b-2409 model
