@@ -63,7 +63,7 @@ const insertDomDialog = (_content: string, _type: string) => {
   },
   processAiResponse = async (_prompt: string) => {
     const myRequest: ChatCompletionRequest = {
-      model: 'pixtral-12b-2409',
+      model: 'open-mixtral-8x22b',
       messages: [
         {
           role: 'user',
@@ -99,27 +99,6 @@ const insertDomDialog = (_content: string, _type: string) => {
           outputResponseFromAi('Error on your request')
         }
       })
-
-    // ? for stream answers
-
-    // const result = await client.chat.stream({
-    //   model: 'mistral-small-latest',
-    //   messages: [
-    //     { role: 'user', content: _prompt },
-    //     {
-    //       role: 'system',
-    //       content:
-    //         'Try to be as concise as possible with no more than 100 words per message. Add a little of sarcasm or irony when possible',
-    //     },
-    //   ],
-    //   temperature: 0.5,
-    // })
-
-    // for await (const chunk of result) {
-    //   const streamText = chunk.data.choices[0].delta.content
-    //   // console.log(streamText)
-    //   myOutputNode.textContent = myOutputNode.textContent + streamText!
-    // }
   },
   init = (e) => {
     document.removeEventListener('DOMContentLoaded', init, false)

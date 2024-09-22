@@ -20,10 +20,6 @@ main {
     max-width: 40rem;
     width: 90%;
     margin: 8rem auto 12rem auto;
-
-    /* height: 9rem auto calc(100vh - 72px - 3rem - 3rem - 112px - 3rem - 3rem)
-      auto; */
-    /* height: calc(100vh - 72px - 3rem - 3rem - 112px - 3rem - 3rem); */
     overflow-y: auto;
 
     /*
