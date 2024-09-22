@@ -1,4 +1,4 @@
-# ChispasAi
+# SparkAi
 
 ![SparkAi](https://i.ibb.co/C2zYkYC/localhost-1234.png)
 
