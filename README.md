@@ -6,7 +6,7 @@ This is a quick experiment creating a basic Ai interface / assitant based on Mis
 
 The interface supports chatting with the Ai and prompts are staked upon each other similar to ChatGPT and many other models.
 
-The interface DOES not support persistent chats among visits. If you leave or refresh the page they will go away.
+The interface DOES NOT support persistent chats among visits. If you leave or refresh the page they will go away.
 
 You will need to get your own API key over at [Mistral](https://mistral.ai/)
 
